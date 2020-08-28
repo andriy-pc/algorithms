@@ -57,6 +57,35 @@ public class Sorting {
         return arr;
     }
 
+    public static int[] shellSortImproved(int arr[]) {
+
+
+        int h = 1;
+        int length = arr.length;
+        int curr;
+
+        while (h < length / 3) {
+            h = 3 * h + 1;
+        }
+
+        while (h > 1) {
+            for (int i = h; i < length; ++i) {
+                curr = arr[i];
+                for (int j = i - 1; j >= 0; --j) {
+                    if (curr < arr[j]) {
+                        arr[j + 1] = arr[j];
+                    } else {
+                        break;
+                    }
+                    arr[j] = curr;
+                }
+            }
+            h = h / 3;
+        }
+
+        return arr;
+    }
+
     public static int[] bubbleSort(int arr[]) {
         int length = arr.length;
         int tmp;
