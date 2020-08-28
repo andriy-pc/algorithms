@@ -39,6 +39,24 @@ public class Sorting {
         return arr;
     }
 
+    public static int[] shellSort(int[] arr) {
+        int curr;
+        for (int startStep = 4; startStep > 0; --startStep) {
+            for (int i = startStep; i < arr.length; i += startStep) {
+                curr = arr[i];
+                for (int j = i - startStep; j >= 0; j -= startStep) {
+                    if (curr < arr[j]) {
+                        arr[j + startStep] = arr[j];
+                    } else {
+                        break;
+                    }
+                    arr[j] = curr;
+                }
+            }
+        }
+        return arr;
+    }
+
     public static int[] bubbleSort(int arr[]) {
         int length = arr.length;
         int tmp;
@@ -127,6 +145,46 @@ public class Sorting {
         arr[i] = arr[endIndex];
         arr[endIndex] = tmp;
         return i;
+    }
+
+    public static int[] quickSortHoar(int arr[]) {
+        return quickSortHoar(arr, 0, arr.length - 1);
+    }
+
+    private static int[] quickSortHoar(int arr[], int startIndex, int endIndex) {
+        if(startIndex < endIndex) {
+            int pivot = calculatePivot(arr, startIndex, endIndex);
+            quickSort(arr, startIndex, pivot-1);
+            quickSort(arr, pivot + 1, endIndex);
+        }
+        return arr;
+    }
+
+    private static int calculatePivot(int arr[], int start, int end) {
+        int pivot = arr[(start + end)/2];
+        int l = start;
+        int r = end;
+        int tmp;
+
+        while(true) {
+            while(arr[l] < pivot) {
+                ++l;
+            }
+
+            while(arr[r] > pivot) {
+                --r;
+            }
+
+            if(l >= r) {
+                return r;
+            }
+
+            tmp = arr[l];
+            arr[l] = arr[r];
+            arr[r] = tmp;
+            ++l;
+            --r;
+        }
     }
 
 }
