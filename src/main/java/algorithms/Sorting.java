@@ -1,6 +1,7 @@
 package algorithms;
 
 public class Sorting {
+    /* N^2/2 compares and N exchanges*/
     public static int[] selectSort(int arr[]) {
         int length = arr.length;
         int indexMin;
@@ -21,6 +22,11 @@ public class Sorting {
         return arr;
     }
 
+    /*N^2/4 compares and N^2/4 exchanges
+    * If array is sorted(ACS), N-1 compares applied, and 0 exchanges
+    * But if array is sorted in DESC, N^2/2 compares and N^2/2 exchanges
+    * If array is partially sorted - alg runs in linear time
+    * This alg is stable, as we never move equal items pass one another*/
     public static int[] insertSort(int arr[]) {
         int length = arr.length;
         int curr;
@@ -57,6 +63,7 @@ public class Sorting {
         return arr;
     }
 
+    /*Compares in worst case: N^(3/2)*/
     public static int[] shellSortImproved(int arr[]) {
 
 
@@ -104,7 +111,6 @@ public class Sorting {
     public static int[] mergeSort(int arr[]) {
         return mergeSort(arr, 0, arr.length - 1);
     }
-
     private static int[] mergeSort(int arr[], int startIndex, int endIndex) {
         int mid;
         if (startIndex < endIndex) {
@@ -129,7 +135,7 @@ public class Sorting {
         int j = 0;
         int k = start;
         while (i < l && j < r) {
-            if (left[i] < right[j]) {
+            if (left[i] <= right[j]) {
                 arr[k++] = left[i++];
             } else {
                 arr[k++] = right[j++];
@@ -144,9 +150,9 @@ public class Sorting {
     }
 
     public static int[] quickSort(int arr[]) {
+        //shuffle to get rid of the case where all elements are sorted
         return quickSort(arr, 0, arr.length - 1);
     }
-
     private static int[] quickSort(int arr[], int startIndex, int endIndex) {
         if (startIndex < endIndex) {
             int mid = partition(arr, startIndex, endIndex);
@@ -155,7 +161,6 @@ public class Sorting {
         }
         return arr;
     }
-
     private static int partition(int arr[], int startIndex, int endIndex) {
         int pivot = arr[endIndex];
         int i = startIndex - 1;
@@ -179,7 +184,6 @@ public class Sorting {
     public static int[] quickSortHoar(int arr[]) {
         return quickSortHoar(arr, 0, arr.length - 1);
     }
-
     private static int[] quickSortHoar(int arr[], int startIndex, int endIndex) {
         if(startIndex < endIndex) {
             int pivot = calculatePivot(arr, startIndex, endIndex);
@@ -188,7 +192,6 @@ public class Sorting {
         }
         return arr;
     }
-
     private static int calculatePivot(int arr[], int start, int end) {
         int pivot = arr[(start + end)/2];
         int l = start;
@@ -205,16 +208,48 @@ public class Sorting {
             }
 
             if(l >= r) {
+                arr[r] = pivot;
                 return r;
             }
 
             tmp = arr[l];
             arr[l] = arr[r];
             arr[r] = tmp;
-            ++l;
-            --r;
         }
     }
 
+    //ASC
+    public static void quickSortDuplicateKeys(int arr[]) {
+        quickSortDuplicateKeys(arr, 0, arr.length-1);
+    }
+    private static void quickSortDuplicateKeys(int arr[], int start, int end) {
+        if (end <= start) {
+            return;
+        }
+        int l = start;
+        int r = end;
+        int i = start;
+        int pivot = arr[start];
+        int tmp;
+
+        while (i <= r) {
+            if (arr[i] < pivot) {
+                //exchange arr[i] and arr[l] and increment both
+                tmp = arr[i];
+                arr[i++] = arr[l];
+                arr[l++] = tmp;
+            } else if (arr[i] > pivot) {
+                //exchange arr[i] and arr[r] and decrement r
+                tmp = arr[i];
+                arr[i] = arr[r];
+                arr[r--] = tmp;
+            } else {
+                i++;
+            }
+        }
+
+        quickSortDuplicateKeys(arr, start, l - 1);
+        quickSortDuplicateKeys(arr, r + 1, end);
+    }
 }
 
